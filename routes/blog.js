@@ -3,6 +3,8 @@ const multer = require("multer");
 const router = Router();
 const path = require("path");
 const Blog = require("../models/blog_model");
+const Comment = require("../models/comment");
+const mongoose = require('mongoose');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -32,5 +34,38 @@ router.post('/', upload.single("coverImage"), async (req, res) => {
     return res.redirect(`/blog/${blog._id}`);
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const blogId = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(blogId)) {
+            return res.status(400).send('Invalid blog ID');
+        }
+        const blog = await Blog.findById(blogId).populate("createdBy");
+        const comments = await Comment.find({ blogId: req.params.id }).populate(
+            "createdBy"
+        );
+        if (!blog) {
+            return res.status(404).send('Blog not found');
+        }
+        // console.log(blog);
+        res.render('blog', { 
+            blog,
+            user: req.user,
+            comments,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.post("/comment/:blogId", async (req, res) => {
+    await Comment.create({
+      content: req.body.content,
+      blogId: req.params.blogId,
+      createdBy: req.user._id,
+    });
+    return res.redirect(`/blog/${req.params.blogId}`);
+});
 
 module.exports = router;

@@ -20,8 +20,8 @@ app.set("views",path.resolve("./views"));
 app.use(express.urlencoded({extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
+app.use(express.static(path.resolve("./public/uplodes")));
 
-app.use(express.static(path.resolve('./public/uplodes')));
 app.get('/', async (req , res) => {
     const allBlog = await Blog.find({}).sort('createdAt');
     res.render("home", {
@@ -29,7 +29,9 @@ app.get('/', async (req , res) => {
         blogs: allBlog,
     });
 });
+
 app.use("/user", userRout);
+app.use(express.static(path.resolve("./public")));
 app.use("/blog", blogRoute);
 //---------------------------------------------------------------------//
 app.listen(PORT , () => console.log(`Server Started At PORT ${PORT}`));

@@ -1,22 +1,27 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require("mongoose");
 
-var blogSchema = new mongoose.Schema({
+const blogSchema = new Schema(
+  {
     titel: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     body: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     coverImageURL: {
-        type: String,
+      type: String,
+      required: false,
     },
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-    }
-}, { timestamps: true });
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  { timestamps: true }
+);
 
-//Export the model
-module.exports = mongoose.model('blog', blogSchema);
+const Blog = model("blog", blogSchema);
+
+module.exports = Blog;

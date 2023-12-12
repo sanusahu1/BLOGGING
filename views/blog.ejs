@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head') %>
+        <title>Blog</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+            }
+
+            .container {
+                background-color: #ffffff;
+                padding: 20px;
+                margin: 20px auto;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                /* Adjust max-width based on your design */
+            }
+
+            h1 {
+                color: #007bff;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 20px 0;
+                /* Adjust margin based on your design */
+            }
+
+            pre {
+                white-space: pre-wrap;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            h3 {
+                color: #007bff;
+            }
+
+            form {
+                margin-top: 20px;
+            }
+
+            input {
+                width: calc(100% - 85px);
+                margin-right: 10px;
+            }
+
+            .btn-primary {
+                width: 80px;
+            }
+
+            /* Comments Section */
+            .comment-container {
+                margin-top: 20px;
+            }
+
+            .comment {
+                margin-top: 15px;
+            }
+
+            .comment img {
+                width: 50px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            /* Navigation Styles (Modify based on your nav structure) */
+            nav {
+                background-color: #343a40;
+                padding: 10px;
+                color: #ffffff;
+            }
+
+            nav a {
+                color: #ffffff;
+                text-decoration: none;
+                margin-right: 15px;
+            }
+
+            nav a:hover {
+                text-decoration: underline;
+            }
+        </style>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+        <div class="container mt-4">
+            <h1>
+                <%= blog.titel %>
+            </h1>
+            <img src="	http://localhost:8004/<%=blog.coverImageURL%>" width="700px" />
+            <pre class="mt-3"><%= blog.body %></pre>
+            <pre> <img src="<%= blog.createdBy.profilePicUrl %>" width="50px" /> <%= blog.createdBy.name %> </pre>
+        </div>
+
+        <div class="container mt-3">
+            <h3>Comments (<%= comments.length %>)</h3>
+            <% if (locals.user) { %>
+                <form action="/blog/comment/<%= blog._id %>" method="post">
+                    <div class="mb-3">
+                        <input type="text" name="content" class="form-control" placeholder="Enter your comment" />
+                        <button class="btn btn-sm btn-primary mt-2" type="submit">Add</button>
+                    </div>
+                </form>
+
+                <% } %>
+                    <div class="mt-3">
+                        <% comments.forEach(comment=> { %>
+                            <div class="comment">
+                                <div class="user-info">
+                                    <img src="<%= comment.createdBy.profilePicUrl %>" width="20px" />
+                                    <span>
+                                        <%= comment.createdBy.name %>
+                                    </span>
+                                </div>
+                                <pre><%= comment.content %></pre>
+                            </div>
+                            <% }) %>
+                    </div>
+        </div>
+
+        <%- include('./partials/script') %>
+</body>
+
+</html>

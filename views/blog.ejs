@@ -29,8 +29,8 @@
                 max-width: 100%;
                 height: auto;
                 display: block;
-                margin: 20px 0;
-                /* Adjust margin based on your design */
+                /* margin: 20px 0; */
+                margin-left: 30px;
             }
 
             pre {
@@ -39,8 +39,8 @@
                 line-height: 1.5;
             }
 
-            h3 {
-                color: #007bff;
+            h4 {
+                color: #1c5a0f;
             }
 
             form {
@@ -63,10 +63,46 @@
 
             .comment {
                 margin-top: 15px;
+                display: flex;
+                align-items: flex-start;
+            }
+
+            .cmt_bubble {
+                background-color: #007bff;
+                padding: 10px;
+                border-radius: 8px;
+                color: #ffffff;
+            }
+
+            .cmt_content {
+                margin: 0;
+            }
+
+            .comment pre {
+                white-space: pre-wrap;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .user-info {
+                display: flex;
+                align-items: center;
+                margin-right: 10px;
+                /* Adjust margin based on your design */
+            }
+
+            .user-info img {
+                width: 50px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .user-info span {
+                font-weight: bold;
             }
 
             .comment img {
-                width: 50px;
+                width: 30px;
                 border-radius: 50%;
                 margin-right: 10px;
             }
@@ -98,11 +134,18 @@
             </h1>
             <img src="	http://localhost:8004/<%=blog.coverImageURL%>" width="700px" />
             <pre class="mt-3"><%= blog.body %></pre>
-            <pre> <img src="<%= blog.createdBy.profilePicUrl %>" width="50px" /> <%= blog.createdBy.name %> </pre>
+            <div class="comment">
+                <div class="user-info">
+                    <img src="<%= blog.createdBy.profilePicUrl %>" width="50px" />
+                    <span>
+                        <%= blog.createdBy.name %>
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div class="container mt-3">
-            <h3>Comments (<%= comments.length %>)</h3>
+            <h4>Comments (<%= comments.length %>)</h4>
             <% if (locals.user) { %>
                 <form action="/blog/comment/<%= blog._id %>" method="post">
                     <div class="mb-3">
@@ -121,8 +164,13 @@
                                         <%= comment.createdBy.name %>
                                     </span>
                                 </div>
-                                <pre><%= comment.content %></pre>
+                                <div class="cmt_bubble">
+                                    <div class="cmt_content">
+                                        <pre><%= comment.content %></pre>
+                                    </div>
+                                </div>
                             </div>
+
                             <% }) %>
                     </div>
         </div>

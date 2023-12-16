@@ -75,10 +75,22 @@ router.post("/comment/:blogId", async (req, res) => {
 
 router.post("/like/:blogId", async (req, res) => {
     try {
+        const existingLike = await Like.findOne({
+            blogId: req.params.blogId,
+            createdBy: req.user._id,
+        });
+
+        if (existingLike) {
+            // return res.status(400).send("You have already liked this post.");
+            const errorMessage = "You have already liked this post.";
+            return res.render("blog", { error: errorMessage });
+        }
+
         await Like.create({
             blogId: req.params.blogId,
             createdBy: req.user._id,
         });
+
         return res.redirect(`/blog/${req.params.blogId}`);
     } catch (error) {
         console.error("Error adding like:", error);

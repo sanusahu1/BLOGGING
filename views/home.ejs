@@ -4,15 +4,35 @@
 <head>
     <%- include('./partials/head') %>
         <title>Home Page</title>
+    <style>
+         .overlay-text {
+            color: rgba(0, 0, 0, 0.925);
+            font-weight: bold;
+            font-size: 34px;
+            margin-bottom: 39%;
+            background-color: rgb(156, 156, 131);
+        }
+    </style>
 </head>
 
 <body>
     <%- include('./partials/nav') %>
+
+    <form class="d-flex" role="search" action="/search" method="get">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>    
+    
         <div id="blogCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <% blogs.forEach((blog, index)=> { %>
                     <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                         <img src="<%= blog.coverImageURL %>" class="d-block w-100" alt="CoverImage">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5 class="overlay-text">
+                                <%= blog.titel %>
+                            </h5>
+                        </div>
                     </div>
                     <% }) %>
             </div>
@@ -25,7 +45,6 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-
 
         <div class="container mt-3">
             <div class="row row-cols-3">

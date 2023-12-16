@@ -128,60 +128,67 @@
 
 <body>
     <%- include('./partials/nav') %>
-        <div class="container mt-4">
-            <h1>
-                <%= blog.titel %>
-            </h1>
-            <img src="	http://localhost:8004/<%=blog.coverImageURL%>" width="700px" />
-            <pre class="mt-3"><%= blog.body %></pre>
-            <div class="comment">
-                <div class="user-info">
-                    <img src="<%= blog.createdBy.profilePicUrl %>" width="50px" />
-                    <span>
-                        <%= blog.createdBy.name %>
-                    </span>
+    <!-- nav Seciton end -->
+    <% if (locals.error) { %>
+        <!-- alert will be done on nav  -->
+    <% } else { %>
+            <div class="container mt-4">
+                <h1>
+                    <%= blog.titel %>
+                </h1>
+                <img src="	http://localhost:8004/<%=blog.coverImageURL%>" width="700px" />
+                <pre class="mt-3"><%= blog.body %></pre>
+                <div class="comment">
+                    <div class="user-info">
+                        <img src="<%= blog.createdBy.profilePicUrl %>" width="50px" />
+                        <span>
+                            <%= blog.createdBy.name %>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="container mt-3">
-            <div class="like">
-                <form action="/blog/like/<%= blog._id %>" method="post">
-                    <button class="btn btn-sm btn-success mt-2" type="submit">Like <%= like.length %> </button>
-                </form>
-            </div>
-           
-            <h4>Comments (<%= comments.length %>)</h4>
-            <% if (locals.user) { %>
-                <form action="/blog/comment/<%= blog._id %>" method="post">
-                    <div class="mb-3">
-                        <input type="text" name="content" class="form-control" placeholder="Enter your comment" />
-                        <button class="btn btn-sm btn-primary mt-2" type="submit">Add</button>
-                    </div>
-                </form>
-
+    
+            <div class="container mt-3">
+                <% if (locals.user) { %>
+                <div class="like">
+                    <form action="/blog/like/<%= blog._id %>" method="post">
+                        <button class="btn btn-sm btn-success mt-2" type="submit">Like <%= like.length %> </button>
+                    </form>
+                </div>
                 <% } %>
-                    <div class="mt-3">
-                        <% comments.forEach(comment=> { %>
-                            <div class="comment">
-                                <div class="user-info">
-                                    <img src="<%= comment.createdBy.profilePicUrl %>" width="20px" />
-                                    <span>
-                                        <%= comment.createdBy.name %>
-                                    </span>
-                                </div>
-                                <div class="cmt_bubble">
-                                    <div class="cmt_content">
-                                        <pre><%= comment.content %></pre>
+
+                <h4>Comments (<%= comments.length %>)</h4>
+                <% if (locals.user) { %>
+                    <form action="/blog/comment/<%= blog._id %>" method="post">
+                        <div class="mb-3">
+                            <input type="text" name="content" class="form-control" placeholder="Enter your comment" />
+                            <button class="btn btn-sm btn-primary mt-2" type="submit">Add</button>
+                        </div>
+                    </form>
+    
+                    <% } %>
+                        <div class="mt-3">
+                            <% comments.forEach(comment=> { %>
+                                <div class="comment">
+                                    <div class="user-info">
+                                        <img src="<%= comment.createdBy.profilePicUrl %>" width="20px" />
+                                        <span>
+                                            <%= comment.createdBy.name %>
+                                        </span>
+                                    </div>
+                                    <div class="cmt_bubble">
+                                        <div class="cmt_content">
+                                            <pre><%= comment.content %></pre>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <% }) %>
-                    </div>
-        </div>
-
-        <%- include('./partials/script') %>
+    
+                                <% }) %>
+                        </div>
+            </div>
+    <% } %>
+    <!-- script section -->
+    <%- include('./partials/script') %>
 </body>
 
 </html>

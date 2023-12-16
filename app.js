@@ -32,6 +32,21 @@ app.get('/', async (req , res) => {
     });
 });
 
+app.get("/search", async (req, res) => {
+    try {
+        const regex = new RegExp(req.query.search, 'i');
+
+        const existingBlogs = await Blog.find({
+            titel: { $regex: regex }
+        });
+
+        res.render("home", { blogs: existingBlogs });
+    } catch (error) {
+        console.error("Error finding blog:", error);
+        return res.status(500).send("Internal Server Error");
+    }
+});
+
 app.use("/user", userRout);
 app.use(express.static(path.resolve("./public")));
 app.use("/blog", blogRoute);

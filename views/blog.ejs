@@ -145,6 +145,12 @@
         </div>
 
         <div class="container mt-3">
+            <div class="like">
+                <form action="/blog/like/<%= blog._id %>" method="post">
+                    <button class="btn btn-sm btn-success mt-2" type="submit">Like <%= like.length %> </button>
+                </form>
+            </div>
+           
             <h4>Comments (<%= comments.length %>)</h4>
             <% if (locals.user) { %>
                 <form action="/blog/comment/<%= blog._id %>" method="post">

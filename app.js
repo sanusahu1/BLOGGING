@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
+dotenv.config();
 //---------------------------------------------------------------------//
 const userRout = require('./routes/user_router');
 const blogRoute = require("./routes/blog");
@@ -9,9 +11,9 @@ const { checkForAuthenticationCookie } = require("./middlewares/authentication")
 const Blog = require("./models/blog_model");
 //---------------------------------------------------------------------//
 const app = express();
-const PORT = 8004;
+const defaultPort = 8004; // Set your default port here
 //---------------------------------------------------------------------//
-mongoose.connect("mongodb://127.0.0.1:27017/BLOGGING?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.2")
+mongoose.connect(process.env.MONGODB_URL)
 .then(() => console.log("MongoDB Connected"));
 //---------------------------------------------------------------------//
 app.set("view engine" , "ejs");
@@ -34,4 +36,5 @@ app.use("/user", userRout);
 app.use(express.static(path.resolve("./public")));
 app.use("/blog", blogRoute);
 //---------------------------------------------------------------------//
-app.listen(PORT , () => console.log(`Server Started At PORT ${PORT}`));
+const port = process.env.PORT || defaultPort;
+app.listen(port , () => console.log(`Server Started At PORT ${port}`));

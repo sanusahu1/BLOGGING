@@ -4,6 +4,7 @@ const router = Router();
 const path = require("path");
 const Blog = require("../models/blog_model");
 const Comment = require("../models/comment");
+const Like = require("../models/like");
 const mongoose = require('mongoose');
 
 const storage = multer.diskStorage({
@@ -44,14 +45,18 @@ router.get('/:id', async (req, res) => {
         const comments = await Comment.find({ blogId: req.params.id }).populate(
             "createdBy"
         );
+        const like = await Like.find({ blogId: req.params.id }).populate(
+            "createdBy"
+        );
         if (!blog) {
             return res.status(404).send('Blog not found');
         }
-        // console.log(blog);
+        // console.log(like);
         res.render('blog', { 
             blog,
             user: req.user,
             comments,
+            like,
         });
     } catch (error) {
         console.error(error);
@@ -67,5 +72,19 @@ router.post("/comment/:blogId", async (req, res) => {
     });
     return res.redirect(`/blog/${req.params.blogId}`);
 });
+
+router.post("/like/:blogId", async (req, res) => {
+    try {
+        await Like.create({
+            blogId: req.params.blogId,
+            createdBy: req.user._id,
+        });
+        return res.redirect(`/blog/${req.params.blogId}`);
+    } catch (error) {
+        console.error("Error adding like:", error);
+        return res.status(500).send("Internal Server Error");
+    }
+});
+
 
 module.exports = router;

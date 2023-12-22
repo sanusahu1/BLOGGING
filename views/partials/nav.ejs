@@ -24,6 +24,12 @@
                 <li><a class="dropdown-item" href="#">Something else here</a></li> -->
               </ul>
             </li>
+            <li class="">
+              <a class="icon-link mt-2 " href="/profile/<%= user._id %>">
+                <svg class="bi" aria-hidden="true"><use xlink:href="#box-seam"></use></svg>
+                <img src="<%= user.profilePicUrl %>" alt="" srcset="" height="25px" >
+              </a>
+            </li>
           <% } else {%>
             <li class="nav-item">
               <a class="nav-link" href="/user/signup">Create Account</a>

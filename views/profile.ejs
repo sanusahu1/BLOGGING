@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Profile Page</title>
+  <%- include('./partials/head') %>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+
+    <style>
+      .social-icons a {
+        font-size: 24px;
+        /* Set the initial size */
+        color: #3498db;
+        /* Set the initial color */
+        text-decoration: none;
+        margin: 0 10px;
+        /* Adjust spacing between icons */
+        transition: transform 0.3s, font-size 0.3s;
+        /* Add transition for smooth hover effect */
+      }
+
+      .social-icons a:hover {
+        transform: scale(1.2);
+        /* Make the icon 20% bigger on hover */
+        font-size: 30px;
+        /* Increase font size on hover */
+        color: #e74c3c;
+        /* Change color on hover */
+      }
+
+      .network{
+        font-size: 24px;
+        /* Set the initial size */
+        text-decoration: none;
+        margin: 0 10px;
+        /* Adjust spacing between icons */
+        transition: transform 0.3s, font-size 0.3s;
+        /* Add transition for smooth hover effect */
+      }
+      .network a:hover {
+        transform: scale(1.2);
+        /* Make the icon 20% bigger on hover */
+        font-size: 30px;
+        /* Increase font size on hover */
+        color: #e74c3c;
+        /* Change color on hover */
+      }
+    </style>
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+    <% if (user) { %>
+      <div class="row justify-content-center">
+        <div class="card" style="width: 18rem;">
+          <img src="<%= user.profilePicUrl %>" class="card-img-top" alt="ProfilePic">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= user.name %> <div class="network">
+                <a href="#" style="color: blue;"><i class="fa-brands fa-rocketchat"></i></a>
+                <a href="#" style="color: green;"><i class="fa-solid fa-globe"></i></a>
+              </div>
+            </h5>
+            <p class="card-text">
+              <%= user.email %>
+            </p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Followers Following</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-square-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></i></a>
+            <a href="#"><i class="fa-brands fa-square-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+      <% } %>
+
+        <%- include('./partials/script') %>
+          <script src="https://kit.fontawesome.com/903bcbda2e.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

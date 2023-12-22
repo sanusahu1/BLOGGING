@@ -7,6 +7,7 @@ dotenv.config();
 //---------------------------------------------------------------------//
 const userRout = require('./routes/user_router');
 const blogRoute = require("./routes/blog");
+const profileRoute = require("./routes/profile");
 const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const Blog = require("./models/blog_model");
 //---------------------------------------------------------------------//
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGODB_URL)
 app.set("view engine" , "ejs");
 app.set("views",path.resolve("./views"));
 //---------------------------------------------------------------------//
+app.use(require('express-status-monitor')());
 app.use(express.urlencoded({extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
@@ -50,6 +52,7 @@ app.get("/search", async (req, res) => {
 app.use("/user", userRout);
 app.use(express.static(path.resolve("./public")));
 app.use("/blog", blogRoute);
+app.use("/profile",profileRoute);
 //---------------------------------------------------------------------//
 const port = process.env.PORT || defaultPort;
 app.listen(port , () => console.log(`Server Started At PORT ${port}`));

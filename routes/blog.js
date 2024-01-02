@@ -5,6 +5,7 @@ const path = require("path");
 const Blog = require("../models/blog_model");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
+const Connection = require("../models/connection_model");
 const mongoose = require('mongoose');
 
 const storage = multer.diskStorage({
@@ -48,6 +49,8 @@ router.get('/:id', async (req, res) => {
         const like = await Like.find({ blogId: req.params.id }).populate(
             "createdBy"
         );
+        const connection = await Connection.find({ flwId: req.user._id });
+
         if (!blog) {
             return res.status(404).send('Blog not found');
         }
@@ -57,6 +60,7 @@ router.get('/:id', async (req, res) => {
             user: req.user,
             comments,
             like,
+            connection,
         });
     } catch (error) {
         console.error(error);
@@ -96,6 +100,29 @@ router.post("/like/:blogId", async (req, res) => {
         console.error("Error adding like:", error);
         return res.status(500).send("Internal Server Error");
     }
+});
+
+router.post('/follow', async (req, res) => {
+    const { id1, id2 } = req.body;
+
+    if (id1 === id2) {
+        //return res.status(400).json({ error: "You can't follow yourself." });
+        return res.render("blog", { error: "You can't follow yourself." });
+    }
+
+    const existingConnection = await Connection.findOne({ flngId: id2, flwId: id1 });
+
+    if (existingConnection) {
+        //return res.status(400).json({ error: "You are already following this person." });
+        return res.render("blog", { error: "You are already following this person." });
+    }
+
+    const connection = await Connection.create({
+        flngId: id2,
+        flwId: id1,
+    });
+
+    return res.redirect(`/blog/${connection._id}`);
 });
 
 

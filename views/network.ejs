@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Page</title>
+    <%- include('./partials/head') %>
+        <style>
+            /* Grid layout for followers and following */
+            h1 {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                /* Adjust the gap based on your preference */
+            }
+
+            .column {
+                text-align: center;
+            }
+
+            p {
+                font-weight: bold;
+            }
+
+            .follower,
+            .following {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 10px;
+            }
+
+            img {
+                width: 50px;
+                /* Adjust the size based on your preference */
+                height: 50px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            span {
+                font-size: 16px;
+            }
+        </style>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+
+        <div class="grid-container">
+            <div class="column">
+                <h1>
+                    <%= user.name %> Followers
+                </h1>
+                <p>Follower</p>
+                <% followers.forEach(element=> { %>
+                    <div class="follower">
+                        <img src="<%= element.flwId.profilePicUrl %>" alt="<%= element.flwId.name %>">
+                        <span>
+                            <%= element.flwId.name %>
+                        </span>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <div class="column">
+                <h1>
+                    <%= user.name %> Following
+                </h1>
+                <p>Following</p>
+                <% following.forEach(element=> { %>
+                    <div class="following">
+                        <img src="<%= element.flngId.profilePicUrl %>" alt="<%= element.flwId.name %>">
+                        <span>
+                            <%= element.flngId.name %>
+                        </span>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+
+        <%- include('./partials/script') %>
+</body>
+
+</html>

@@ -122,7 +122,7 @@ router.post('/follow', async (req, res) => {
         flwId: id1,
     });
 
-    return res.redirect(`/blog/${connection._id}`);
+    return res.redirect("/");
 });
 
 

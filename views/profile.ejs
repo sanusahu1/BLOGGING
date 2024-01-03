@@ -31,7 +31,7 @@
         /* Change color on hover */
       }
 
-      .network{
+      .network {
         font-size: 24px;
         /* Set the initial size */
         text-decoration: none;
@@ -40,6 +40,7 @@
         transition: transform 0.3s, font-size 0.3s;
         /* Add transition for smooth hover effect */
       }
+
       .network a:hover {
         transform: scale(1.2);
         /* Make the icon 20% bigger on hover */
@@ -53,23 +54,26 @@
 
 <body>
   <%- include('./partials/nav') %>
-    <% if (user) { %>
+
+    <% if (typeof user !=='undefined' ) { %>
       <div class="row justify-content-center">
         <div class="card" style="width: 18rem;">
           <img src="<%= user.profilePicUrl %>" class="card-img-top" alt="ProfilePic">
           <div class="card-body">
             <h5 class="card-title">
-              <%= user.name %> <div class="network">
-                <a href="#" style="color: blue;"><i class="fa-brands fa-rocketchat"></i></a>
-                <a href="#" style="color: green;"><i class="fa-solid fa-globe"></i></a>
-              </div>
+              <%= user.name %>
+                <div class="network">
+                  <a href="#" style="color: blue;"><i class="fa-brands fa-rocketchat"></i></a>
+                  <a href="#" style="color: green;"><i class="fa-solid fa-globe"></i></a>
+                </div>
             </h5>
             <p class="card-text">
               <%= user.email %>
             </p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Followers Following</li>
+            <li class="list-group-item">Followers => <%= followersCount %> Following => <%= followingCount %>
+            </li>
           </ul>
           <div class="social-icons">
             <a href="#"><i class="fa-brands fa-facebook"></i></a>
@@ -80,10 +84,12 @@
           </div>
         </div>
       </div>
-      <% } %>
+      <% } else { %>
+        <p>Failed to fetch user details</p>
+        <% } %>
 
-        <%- include('./partials/script') %>
-          <script src="https://kit.fontawesome.com/903bcbda2e.js" crossorigin="anonymous"></script>
+      <%- include('./partials/script') %>
+      <script src="https://kit.fontawesome.com/903bcbda2e.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

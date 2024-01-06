@@ -1,0 +1,15 @@
+# Node.js
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Dependency directories
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional - if using npm, you can add the following to avoid including npm-debug.log in your repo
+npm-debug.log

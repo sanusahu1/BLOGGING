@@ -38,30 +38,37 @@ router.post('/', upload.single("coverImage"), async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const blogId = req.params.id;
-        if (!mongoose.Types.ObjectId.isValid(blogId)) {
-            return res.status(400).send('Invalid blog ID');
-        }
-        const blog = await Blog.findById(blogId).populate("createdBy");
-        const comments = await Comment.find({ blogId: req.params.id }).populate(
-            "createdBy"
-        );
-        const like = await Like.find({ blogId: req.params.id }).populate(
-            "createdBy"
-        );
-        const connection = await Connection.find({ flwId: req.user._id });
+        if (req.params.id === undefined || req.user === undefined ) {
+            //res.status(500).send('You are not Logged in');
+            res.render('blog', {
+                error:"You are not Logged in"
+            });
+        } else {
+            const blogId = req.params.id;
+            if (!mongoose.Types.ObjectId.isValid(blogId)) {
+                return res.status(400).send('Invalid blog ID');
+            }
+            const blog = await Blog.findById(blogId).populate("createdBy");
+            const comments = await Comment.find({ blogId: req.params.id }).populate(
+                "createdBy"
+            );
+            const like = await Like.find({ blogId: req.params.id }).populate(
+                "createdBy"
+            );
+            const connection = await Connection.find({ flwId: req.user._id });
 
-        if (!blog) {
-            return res.status(404).send('Blog not found');
+            if (!blog) {
+                return res.status(404).send('Blog not found');
+            }
+            // console.log(like);
+            res.render('blog', {
+                blog,
+                user: req.user,
+                comments,
+                like,
+                connection,
+            });
         }
-        // console.log(like);
-        res.render('blog', { 
-            blog,
-            user: req.user,
-            comments,
-            like,
-            connection,
-        });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -70,9 +77,9 @@ router.get('/:id', async (req, res) => {
 
 router.post("/comment/:blogId", async (req, res) => {
     await Comment.create({
-      content: req.body.content,
-      blogId: req.params.blogId,
-      createdBy: req.user._id,
+        content: req.body.content,
+        blogId: req.params.blogId,
+        createdBy: req.user._id,
     });
     return res.redirect(`/blog/${req.params.blogId}`);
 });

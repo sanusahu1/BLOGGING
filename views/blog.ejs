@@ -129,12 +129,12 @@
 <body>
     <%- include('./partials/nav') %>
         <!-- nav Seciton end -->
-        <% if (error) { %>
+        <% if (error && status == 500) { %>
             <div class="alert alert-danger" role="alert">
                 You are not loged In ...!!
               </div>
         <% } %>
-        <% if (locals.error) { %>
+        <% if (locals.error && status == 500) { %>
             <!-- alert will be done on nav  -->
             <% } else { %>
                 <div class="container mt-4">

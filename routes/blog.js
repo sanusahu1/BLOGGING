@@ -41,7 +41,7 @@ router.get('/:id', async (req, res) => {
         if (req.params.id === undefined || req.user === undefined ) {
             //res.status(500).send('You are not Logged in');
             res.render('blog', {
-                error:"You are not Logged in"
+                error:"You are not Logged in" , status: 500
             });
         } else {
             const blogId = req.params.id;
@@ -67,6 +67,8 @@ router.get('/:id', async (req, res) => {
                 comments,
                 like,
                 connection,
+                error : "You are ready to rock" ,
+                status : 200
             });
         }
     } catch (error) {
@@ -94,7 +96,7 @@ router.post("/like/:blogId", async (req, res) => {
         if (existingLike) {
             // return res.status(400).send("You have already liked this post.");
             const errorMessage = "You have already liked this post.";
-            return res.render("blog", { error: errorMessage });
+            return res.render("blog", { error: errorMessage , status : 500 });
         }
 
         await Like.create({
@@ -121,7 +123,7 @@ router.post('/follow', async (req, res) => {
 
     if (existingConnection) {
         //return res.status(400).json({ error: "You are already following this person." });
-        return res.render("blog", { error: "You are already following this person." });
+        return res.render("blog", { error: "You are already following this person." , status : 500 });
     }
 
     const connection = await Connection.create({

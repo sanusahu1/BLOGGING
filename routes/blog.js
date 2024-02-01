@@ -7,6 +7,12 @@ const Comment = require("../models/comment");
 const Like = require("../models/like");
 const Connection = require("../models/connection_model");
 const mongoose = require('mongoose');
+const IOredis = require('ioredis');
+
+const redis = new IOredis({
+    host: 'localhost', // Replace with your Redis server's host
+    port: 6379, // Replace with your Redis server's port
+});
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -38,10 +44,26 @@ router.post('/', upload.single("coverImage"), async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        if (req.params.id === undefined || req.user === undefined ) {
-            //res.status(500).send('You are not Logged in');
-            res.render('blog', {
-                error:"You are not Logged in" , status: 500
+        const cacheKey = `blog:${req.params.id}`;
+
+        // Try to get the result from the cache
+        const cachedResult = await redis.get(cacheKey);
+
+        if (cachedResult) {
+            // If found in the cache, send the cached result
+            const result = JSON.parse(cachedResult);
+            return res.render('blog', {
+                ...result,
+                error: "You are ready to rock",
+                status: 200
+            });
+        }
+
+        // If not found in the cache, query the database
+        if (req.params.id === undefined || req.user === undefined) {
+            return res.render('blog', {
+                error: "You are not Logged in",
+                status: 500
             });
         } else {
             const blogId = req.params.id;
@@ -60,15 +82,25 @@ router.get('/:id', async (req, res) => {
             if (!blog) {
                 return res.status(404).send('Blog not found');
             }
-            // console.log(like);
+
+            // Cache the result for future requests
+            await redis.setex(cacheKey, 86400, JSON.stringify({
+                blog,
+                user: req.user,
+                comments,
+                like,
+                connection,
+            }));
+
+            // Send the result to the client
             res.render('blog', {
                 blog,
                 user: req.user,
                 comments,
                 like,
                 connection,
-                error : "You are ready to rock" ,
-                status : 200
+                error: "You are ready to rock",
+                status: 200
             });
         }
     } catch (error) {
